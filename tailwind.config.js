@@ -18,7 +18,7 @@ module.exports = {
           dark: "#040303",
           stroke: "#282A3A",
           primary: "#735F32",
-          highlight: "#C69749",
+          highlight: "#fcfd07",
         },
       },
     },

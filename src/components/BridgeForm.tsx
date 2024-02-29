@@ -11,9 +11,11 @@ import {
 } from "wagmi";
 import { copyToClipboard } from "../utils/copyToClipboard";
 import { shortenEthAddress } from "../utils/shortAddress";
+import Modal from "./Modal";
 
 const BridgeForm = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
+  const [isModalOpen, setisModalOpen] = useState(false);
   const { data: balanceData } = useBalance({
     address,
   });
@@ -51,11 +53,18 @@ const BridgeForm = () => {
 
   const handleSendClick = () => {
     // Add your logic for handling the "Send" button click
+    setisModalOpen(true);
+  };
+
+  const handleSendTransaction = () => {
+    onModalClose();
     if (weiAmount <= Number(balanceData?.value)) {
       sendTransaction && sendTransaction();
     }
   };
-
+  const onModalClose = () => {
+    setisModalOpen(false);
+  };
   const handlePercenClick = (percent: number) => {
     const wei = (percent / 100) * Number(balanceData?.value);
     const amount = String(wei / 10 ** 18);
@@ -185,18 +194,6 @@ const BridgeForm = () => {
                       className="text-ui-highlight"
                     />
                   </p>
-                  <span className="hidden md:inline-flex">|</span>
-                  <p>
-                    Source:{" "}
-                    <a
-                      className="text-ui-highlight"
-                      href="https://docs.blast.io/building/bridges/testnet#eth"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      docs.blast.io
-                    </a>
-                  </p>
                 </div>
               )}
             </div>
@@ -207,6 +204,78 @@ const BridgeForm = () => {
             >
               {transactionLoading ? "Bridging..." : "Bridge to blast l2"}
             </button>
+            <Modal isOpen={isModalOpen} onClose={onModalClose}>
+              <div className="max-w-2xl mx-auto">
+                <p className="text-red-400">
+                  You are about to bridge funds to network mentioned below.
+                  DYOR, Blast haven’t annouced mainnet officially yet.
+                </p>
+                <div className="border border-ui-stroke overflow-x-scroll my-4">
+                  <table className="">
+                    <tbody>
+                      <tr>
+                        <td className="font-medium px-4 py-2 border border-ui-stroke">
+                          Name
+                        </td>
+                        <td className="px-4 py-2 border border-ui-stroke">
+                          Blast L2 Mainnet
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-medium px-4 py-2 border border-ui-stroke">
+                          RPC
+                        </td>
+                        <td className="px-4 py-2 border border-ui-stroke">
+                          <p
+                            onClick={copyToClipboard.bind(
+                              null,
+                              "https://blast.blockpi.network/v1/rpc/public",
+                              () => {
+                                toast.success("Copied!");
+                              }
+                            )}
+                            className="text-wrap break-words"
+                          >
+                            https://blast.blockpi.network/v1/rpc/public
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-medium px-4 py-2 border border-ui-stroke">
+                          Network ID
+                        </td>
+                        <td className="px-4 py-2 border border-ui-stroke">
+                          81457
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-medium px-4 py-2 border border-ui-stroke">
+                          Scanner
+                        </td>
+                        <td className="px-4 py-2 border border-ui-stroke">
+                          https://81547.routescan.io
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="font-medium px-4 py-2 border border-ui-stroke">
+                          Currency
+                        </td>
+                        <td className="px-4 py-2 border border-ui-stroke">
+                          ETH
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  className={`bg-ui-highlight text-ui-dark font-bold uppercase p-3 w-full flex items-center justify-center rounded-xl disabled:opacity-50 disabled:cursor-not-allowed`}
+                  onClick={handleSendTransaction}
+                  disabled={weiAmount < 1 || transactionLoading}
+                >
+                  I understand
+                </button>
+              </div>
+            </Modal>
           </div>
         ) : (
           <div className="text-ui-highlight">Something went wrong!!!</div>
