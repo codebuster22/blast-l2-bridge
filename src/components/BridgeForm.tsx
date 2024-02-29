@@ -86,7 +86,7 @@ const BridgeForm = () => {
       address: address,
       amount: Number(amount),
       hash: transactionData
-        ? `https://sepolia.etherscan.io/tx/${transactionData?.hash}`
+        ? `https://etherscan.io/tx/${transactionData?.hash}`
         : "",
     };
     if (transactionData) {
