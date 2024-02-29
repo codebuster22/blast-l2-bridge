@@ -18,15 +18,24 @@ const Home: NextPage = () => {
       <main>
         <Header />
         <BridgeForm />
-        <p className="text-ui-white text-center py-4">
+        <p className="text-ui-white text-center py-4 ">
           Made with ❤️ by{"  "}
+          <a
+            href="https://x.com/0xmihir"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ui-highlight inline"
+          >
+            0xmihir{" "}
+          </a>
+          &{" "}
           <a
             href="https://www.cryptolancer.in/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-ui-highlight inline"
           >
-            Kritik Sah (dheet.eth) | Open to work!!!
+            Kritik Sah (dheet.eth)
           </a>
         </p>
       </main>

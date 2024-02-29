@@ -4,16 +4,12 @@ import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { configureChains, createConfig, sepolia, WagmiConfig } from "wagmi";
-import { goerli, mainnet } from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import "../styles/globals.css";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    // mainnet,
-    sepolia,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [sepolia] : []),
-  ],
+  [mainnet],
   [publicProvider()]
 );
 
